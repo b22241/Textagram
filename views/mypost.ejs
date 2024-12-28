@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Posts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-800 text-white min-h-screen flex">
+    <!-- Sidebar -->
+    <div class="w-1/4 bg-gray-900 p-4">
+        <h3 class="text-gray-400 text-lg mb-4">Users</h3>
+        <div class="space-y-3">
+            <% allUsers.forEach(function(otherUser) { %>
+                <a href="/message/<%= otherUser._id %>" class="block">
+                    <div class="flex items-center p-2 border-b border-gray-700 bg-gray-800">
+                        <img src="/images/uploads/<%= otherUser.profilepic %>" alt="Profile Picture" class="w-12 h-12 rounded-full mr-4 border-2">
+                        <h3 class=" text-white"><%= otherUser.name %></h3>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full overflow-hidden">
+                    <a href="/profile/upload">
+                        <img src="/images/uploads/<%= user.profilepic %>" alt="Profile Picture" class="w-full h-full object-cover">
+                    </a>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold">Hello, <%= user.name %></h3>
+                    <p class="text-sm text-gray-400">@<%= user.username %></p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href='/profile'class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md"> Go Back </a>
+                <a href="/logout" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md">Logout</a>
+            </div>
+        </div>
+
+        <!-- User's Posts -->
+        <h3 class="text-lg text-gray-400 mb-4">Your Posts</h3>
+        <div class="space-y-4">
+            <% user.posts.reverse().forEach(function(post) { %>
+                <div class="p-4 border border-gray-600 rounded-lg bg-gray-700">
+                 
+                    <p class="text-sm mb-2"><%= post.content %></p>
+                    <div class="flex items-center gap-4 text-sm">
+                        <span><%= post.likes.length %> likes</span>
+                        <a href="/edit/<%= post._id %>" class="text-blue-400">Edit</a>
+                        <form action="/delete/<%= post._id %>" method="POST" class="inline">
+                            <button type="submit" class="text-red-500">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</body>
+</html>

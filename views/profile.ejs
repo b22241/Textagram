@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-800 text-white min-h-screen flex ">
+    <!-- Sidebar -->
+    <div class="w-1/4 bg-gray-900 p-4">
+        <h3 class="text-gray-400 text-lg mb-2">Users</h3>
+        <div class="space-y-3">
+            <% allUsers.forEach(function(otherUser) { %>
+                <a href="/message/<%= otherUser._id %>" class="block">
+                    <div class="flex items-center p-2 border-b border-gray-700 bg-gray-800">
+                        <img src="/images/uploads/<%= otherUser.profilepic %>" alt="Profile Picture" class="w-12 h-12 rounded-full mr-4 border-2 ">
+                        <h3 class="text-medium  text-white"><%= otherUser.name %></h3>
+                    </div>
+                    
+                </a>
+            <% }); %>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow p-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <!-- User Profile Info -->
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full overflow-hidden">
+                    <a href="/profile/upload">
+                        <img src="/images/uploads/<%= user.profilepic %>" alt="Profile Picture" class="w-full h-full object-cover">
+                    </a>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold">Hello, <%= user.name %></h3>
+                    <p class="text-sm text-gray-400">@<%= user.username %></p>
+                </div>
+            </div>
+        
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-4">
+                <a href="/mypost" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md">My Post</a>
+                <a href="/logout" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md">Logout</a>
+            </div>
+        </div>
+        
+
+        <!-- Create Post -->
+        <form action="/post" method="post" class="mb-8">
+            <textarea name="content" placeholder="What's on your mind?" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-sm"></textarea>
+            <button type="submit" class="mt-3 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">Create Post</button>
+        </form>
+
+       <!-- Posts -->
+<h3 class="text-lg text-gray-400 mb-4">All Posts</h3>
+<div class="space-y-4">
+    <% allPosts.forEach(function(post) { %>
+        <div class="p-4 border border-gray-600 rounded-lg bg-gray-700">
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-4">
+                    <img src="/images/uploads/<%= post.user.profilepic %>" alt="Profile Picture" class="w-8 h-8 rounded-full">
+                    <div>
+                        <h4 class="text-green-400"><%= post.user.name %></h4>
+                        <small class="text-gray-400">@<%= post.user.username %></small>
+                    </div>
+                </div>
+                <small class="text-gray-400"><%= new Date(post.date).toLocaleString() %></small>
+            </div>
+            <p class="text-sm mb-2"><%= post.content %></p>
+            <div class="flex items-center gap-4 text-sm">
+                <form action="/like/<%= post._id %>" method="post" style="display: inline;">
+                    <button type="submit" class="<%= post.likes.indexOf(user._id) === -1 ? 'text-gray-400' : 'text-red-500' %>">
+                        <%= post.likes.indexOf(user._id) === -1 ? "🤍" : "❤️" %>
+                    </button>
+                </form>
+                <span><%= post.likes.length %> likes</span>
+
+                <% if (post.user._id.toString() === user._id.toString()) { %>
+                    <!-- Edit option for the post's author -->
+                    <a href="/edit/<%= post._id %>" class="text-blue-400">Edit</a>
+                    <form action="/delete/<%= post._id %>" method="post" style="display: inline;">
+                        <button type="submit" class="">🗑</button>
+                    </form>
+                    
+                <% } %>
+                <a href="/comments/<%= post._id %>" class="text-blue-400">💬</a>
+            </div>
+        </div>
+    <% }); %>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md bg-gray-800 p-4 rounded-lg shadow-lg">
+        <h4 class="text-gray-300 text-xl font-bold mb-4 text-center">All Comments</h4>
+
+        <!-- Display Comments -->
+        <div class="space-y-3">
+            <% post.comments.forEach(function(comment) { %>
+                <div class="bg-gray-700 p-4 rounded-md">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm">
+                            <strong class="text-blue-400"><%= comment.userId.name %></strong>
+                            (@<%= comment.userId.username %>):
+                        </p>
+                        
+                            <form action="/deletecomment/<%= comment._id %>" method="POST">
+                                <button type="submit" class="text-red-500 hover:text-red-700 text-sm">🗑</button>
+                            </form>
+                    </div>
+                    <p class="text-gray-200 mt-2"><%= comment.content %></p>
+                </div>
+            <% }); %>
+            
+        </div>
+        
+        <form action="/comment/<%= post._id %>" method="post" class="mt-6">
+            <textarea name="content" class="w-full p-3 bg-gray-700 text-white rounded-md mb-4 focus:ring-2 focus:ring-blue-500" placeholder="Write your comment..." rows="2" required></textarea>
+            <div class="flex items-center justify-center gap-4">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md transition">
+                    Add Comment
+                </button>
+                <a href='/profile' class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-md transition">
+                    Go Back
+                </a>
+            </div>
+        </form>
+        
+    </div>
+</body>
+</html>
+
